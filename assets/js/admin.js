@@ -281,6 +281,10 @@ function getAdminAccounts() {
 
 function setAdminAccounts(list) {
     localStorage.setItem('esportsAccounts', JSON.stringify(list));
+    // Tự động đồng bộ lên Firebase Realtime Database
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.saveAllAccountsToCloud === 'function') {
+        window.EsportsFirebase.saveAllAccountsToCloud(list);
+    }
 }
 
 function initAdminDashboard(showToast = false) {
@@ -292,11 +296,65 @@ function initAdminDashboard(showToast = false) {
     renderVisitorLogs();
     renderShopOrders();
     syncBackendData();
+    setupFirebaseAdminListeners();
     if (showToast) {
         showAdminToast('Đã làm mới và đồng bộ toàn bộ dữ liệu bảng điều khiển!', 'success');
     }
 }
 window.initAdminDashboard = initAdminDashboard;
+
+let fbListenersAttached = false;
+function setupFirebaseAdminListeners() {
+    if (fbListenersAttached || !window.EsportsFirebase) return;
+    fbListenersAttached = true;
+
+    // 1. Lắng nghe tài khoản mới tạo từ các thiết bị khác trong thời gian thực
+    window.EsportsFirebase.onAccountsChanged(function (cloudAccounts) {
+        if (Array.isArray(cloudAccounts) && cloudAccounts.length > 0) {
+            let localAccounts = getAdminAccounts();
+            let changed = false;
+            cloudAccounts.forEach(function (cA) {
+                if (!cA || !cA.username) return;
+                const idx = localAccounts.findIndex(function (u) {
+                    return u.username && u.username.toLowerCase() === cA.username.toLowerCase();
+                });
+                if (idx === -1) {
+                    localAccounts.push(cA);
+                    changed = true;
+                } else if (JSON.stringify(localAccounts[idx]) !== JSON.stringify(cA)) {
+                    localAccounts[idx] = Object.assign({}, localAccounts[idx], cA);
+                    changed = true;
+                }
+            });
+            if (changed) {
+                localStorage.setItem('esportsAccounts', JSON.stringify(localAccounts));
+                renderKPIs();
+                renderOverviewTables();
+                renderUsersTable();
+                populateDirectTopupSelect();
+            }
+        }
+    });
+
+    // 2. Lắng nghe người và thiết bị đang trực tuyến thời gian thực
+    window.EsportsFirebase.onOnlineUsersChanged(function (sessions) {
+        window.liveOnlineCount = Array.isArray(sessions) ? sessions.length : 0;
+        window.liveOnlineSessions = sessions;
+        const elOnline = document.getElementById('kpiOnlineNow');
+        if (elOnline) {
+            elOnline.textContent = window.liveOnlineCount;
+        }
+    });
+
+    // 3. Lắng nghe nhật ký người truy cập từ tất cả thiết bị trên Cloud
+    window.EsportsFirebase.onVisitorLogsChanged(function (cloudLogs) {
+        if (Array.isArray(cloudLogs) && cloudLogs.length > 0) {
+            localStorage.setItem('esportsVisitorLogs', JSON.stringify(cloudLogs));
+            renderVisitorLogs();
+            renderOverviewTables();
+        }
+    });
+}
 
 async function syncBackendData() {
     try {
@@ -348,9 +406,15 @@ function renderKPIs() {
 
     if (elVisits) elVisits.textContent = visits.toLocaleString('vi-VN');
     if (elOnline) {
-        // Mô phỏng số người trực tuyến sống động (dao động 4 - 14 người)
-        const mockOnline = Math.floor(Math.random() * 8) + 5;
-        elOnline.textContent = mockOnline;
+        if (typeof window.liveOnlineCount === 'number') {
+            elOnline.textContent = window.liveOnlineCount;
+        } else if (window.isFirebaseConfigured && window.isFirebaseConfigured()) {
+            elOnline.textContent = 0;
+        } else {
+            // Khi chưa cấu hình Firebase, mô phỏng số người truy cập
+            const mockOnline = Math.floor(Math.random() * 8) + 5;
+            elOnline.textContent = mockOnline;
+        }
     }
     if (elUsers) elUsers.textContent = users.length;
     if (elRevenue) elRevenue.textContent = totalRevenue.toLocaleString('vi-VN') + ' đ';
@@ -664,6 +728,9 @@ function renderVisitorLogs() {
 document.getElementById('clearVisitorLogsBtn')?.addEventListener('click', () => {
     if (!confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử người truy cập?')) return;
     localStorage.removeItem('esportsVisitorLogs');
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.clearVisitorLogsOnCloud === 'function') {
+        window.EsportsFirebase.clearVisitorLogsOnCloud();
+    }
     renderVisitorLogs();
     renderOverviewTables();
     showAdminToast('Đã xóa toàn bộ nhật ký truy cập hệ thống.');
@@ -1055,6 +1122,9 @@ window.deleteUserByAdmin = function(username) {
     let users = getAdminAccounts();
     users = users.filter(u => u.username.toLowerCase() !== username.toLowerCase());
     setAdminAccounts(users);
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.deleteAccountFromCloud === 'function') {
+        window.EsportsFirebase.deleteAccountFromCloud(username);
+    }
 
     // Nếu đang đăng nhập tài khoản này trên client thì đăng xuất
     if (localStorage.getItem('esportsUser')?.toLowerCase() === username.toLowerCase()) {

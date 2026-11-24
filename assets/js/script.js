@@ -2537,6 +2537,11 @@ function saveCurrentUserAccount(updatedAccount) {
             signal: AbortSignal.timeout(2000)
         }).catch(() => {});
     } catch (e) {}
+
+    // Đồng bộ cập nhật lên Cloud Firebase Realtime Database
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.saveAccountToCloud === 'function') {
+        window.EsportsFirebase.saveAccountToCloud(updatedAccount);
+    }
 }
 
 // --- QUẢN LÝ LỊCH SỬ GIAO DỊCH VÍ & QUYÊN GÓP ---
@@ -2630,8 +2635,35 @@ function getServerApiUrl(endpoint) {
     return 'http://localhost:8000' + ep; // Fallback khi mở file trực tiếp file:///
 }
 
-// Tự động đồng bộ danh sách tài khoản từ máy chủ thực tế (SQLite Database)
+// Tự động đồng bộ danh sách tài khoản từ máy chủ thực tế hoặc Cloud Firebase
 async function syncAccountsWithServer() {
+    // 1. Đồng bộ từ Cloud Firebase (Hỗ trợ Vercel đa thiết bị)
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.fetchAccountsFromCloud === 'function') {
+        try {
+            const cloudUsers = await window.EsportsFirebase.fetchAccountsFromCloud();
+            if (Array.isArray(cloudUsers) && cloudUsers.length > 0) {
+                let accounts = getSavedAccounts();
+                let hasChanges = false;
+                for (const sUser of cloudUsers) {
+                    if (!sUser || !sUser.username) continue;
+                    const idx = accounts.findIndex(a => a.username.toLowerCase() === sUser.username.toLowerCase());
+                    if (idx >= 0) {
+                        accounts[idx] = { ...accounts[idx], ...sUser };
+                    } else {
+                        accounts.push(sUser);
+                        hasChanges = true;
+                    }
+                }
+                if (hasChanges) {
+                    setSavedAccounts(accounts);
+                    if (typeof renderSavedAccounts === 'function') renderSavedAccounts();
+                    if (typeof updateAccountPortalUI === 'function') updateAccountPortalUI();
+                }
+            }
+        } catch (fbErr) {}
+    }
+
+    // 2. Đồng bộ từ Server Python cục bộ (nếu có chạy server.py)
     try {
         const url = getServerApiUrl('/api/users');
         const res = await fetch(url, { signal: AbortSignal.timeout(2500) });
@@ -2770,6 +2802,9 @@ if (upLogoutBtn) {
         if (userProfileDropdown) userProfileDropdown.classList.remove('open');
         updateHeaderAccountState();
         showEsportsToast('Đã đăng xuất tài khoản thành công!');
+        if (window.EsportsFirebase && typeof window.EsportsFirebase.updatePresenceOnAuthChange === 'function') {
+            window.EsportsFirebase.updatePresenceOnAuthChange();
+        }
         if (window.location.pathname.includes('account.html')) {
             updateAccountPortalUI();
         }
@@ -2852,6 +2887,9 @@ if (accountForm) {
         accountModal.classList.remove('open');
         updateHeaderAccountState();
         showEsportsToast(`Chào mừng bạn trở lại, ${matched.username}!`);
+        if (window.EsportsFirebase && typeof window.EsportsFirebase.updatePresenceOnAuthChange === 'function') {
+            window.EsportsFirebase.updatePresenceOnAuthChange();
+        }
         if (window.location.pathname.includes('account.html')) {
             updateAccountPortalUI();
         }
@@ -3539,6 +3577,24 @@ document.getElementById('portalLoginSubmitBtn')?.addEventListener('click', async
         } catch (serverErr) {}
     }
 
+    // Kiểm tra trên Cloud Firebase nếu chưa có trong LocalStorage của máy này
+    if (!matched && window.EsportsFirebase && typeof window.EsportsFirebase.fetchAccountsFromCloud === 'function') {
+        try {
+            const cloudAccounts = await window.EsportsFirebase.fetchAccountsFromCloud();
+            if (Array.isArray(cloudAccounts) && cloudAccounts.length > 0) {
+                const found = cloudAccounts.find(
+                    acc => (acc.username.toLowerCase() === loginUser.toLowerCase() || (acc.email && acc.email.toLowerCase() === loginUser.toLowerCase())) && 
+                           (acc.password === loginPass || acc.password === cleanPass)
+                );
+                if (found) {
+                    matched = found;
+                    accounts.push(matched);
+                    setSavedAccounts(accounts);
+                }
+            }
+        } catch (fbErr) {}
+    }
+
     const isAdminPortalUser = ['admin', 'adminroot', 'admin@esports.gg'].includes(loginUser.toLowerCase());
     const validPortalAdminPasses = [localStorage.getItem('esportsAdminPass') || MASTER_DEFAULT_ADMIN_PASS, 'admin', 'Admin@Esports2026!', '123456'];
     if (!matched && isAdminPortalUser) {
@@ -3598,6 +3654,9 @@ document.getElementById('portalLoginSubmitBtn')?.addEventListener('click', async
     updateHeaderAccountState();
     updateAccountPortalUI();
     showEsportsToast(`Chào mừng bạn trở lại, ${matched.username}!`);
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.updatePresenceOnAuthChange === 'function') {
+        window.EsportsFirebase.updatePresenceOnAuthChange();
+    }
 });
 
 // ==========================================================================
@@ -3912,6 +3971,14 @@ if (createAccountForm) {
         setSavedAccounts(accounts);
         localStorage.setItem('esportsUser', username);
 
+        // ĐỒNG BỘ LÊN CLOUD FIREBASE ĐỂ TẤT CẢ THIẾT BỊ VÀ ADMIN ĐỀU THẤY
+        if (window.EsportsFirebase && typeof window.EsportsFirebase.saveAccountToCloud === 'function') {
+            window.EsportsFirebase.saveAccountToCloud(newAccount);
+        }
+        if (window.EsportsFirebase && typeof window.EsportsFirebase.updatePresenceOnAuthChange === 'function') {
+            window.EsportsFirebase.updatePresenceOnAuthChange();
+        }
+
         createAccountForm.reset();
         if (createAccountMsg) createAccountMsg.textContent = '';
         if (regOtpStatusHint) {
@@ -4091,6 +4158,11 @@ function trackVisitorAccess() {
     logs.unshift(entry);
     if (logs.length > 80) logs = logs.slice(0, 80);
     localStorage.setItem('esportsVisitorLogs', JSON.stringify(logs));
+
+    // Đẩy nhật ký truy cập lên Cloud Firebase
+    if (window.EsportsFirebase && typeof window.EsportsFirebase.pushVisitorLogToCloud === 'function') {
+        window.EsportsFirebase.pushVisitorLogToCloud(entry);
+    }
 }
 
 // Khởi chạy khi load trang
