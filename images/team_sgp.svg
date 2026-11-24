@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="sgpBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09142e"/>
+      <stop offset="100%" stop-color="#142654"/>
+    </linearGradient>
+    <linearGradient id="sgpBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#sgpBg)" stroke="#3b82f6" stroke-width="2"/>
+  <!-- SGP Ghost Crest -->
+  <polygon points="60,20 88,34 82,74 60,88 38,74 32,34" fill="#0c1736" stroke="url(#sgpBlue)" stroke-width="2.5"/>
+  <text x="60" y="62" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="20" fill="url(#sgpBlue)" text-anchor="middle">SGP</text>
+  <text x="60" y="110" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="9" fill="#93c5fd" text-anchor="middle" letter-spacing="1">SAIGON PHANTOM</text>
+</svg>

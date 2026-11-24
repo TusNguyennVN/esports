@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="wagBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#081820"/>
+      <stop offset="100%" stop-color="#0f2b38"/>
+    </linearGradient>
+    <linearGradient id="wagCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#wagBg)" stroke="#06b6d4" stroke-width="2"/>
+  <!-- Wolf Head Outline / Ghost -->
+  <polygon points="60,25 72,45 88,40 82,60 70,75 60,85 50,75 38,60 32,40 48,45" fill="none" stroke="url(#wagCyan)" stroke-width="3"/>
+  <polygon points="60,40 68,52 60,68 52,52" fill="url(#wagCyan)"/>
+  <circle cx="50" cy="54" r="3" fill="#ffffff"/>
+  <circle cx="70" cy="54" r="3" fill="#ffffff"/>
+  <text x="60" y="110" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="11" fill="#22d3ee" text-anchor="middle" letter-spacing="1.5">SECRET WAG</text>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="vgmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#061a14"/>
+      <stop offset="100%" stop-color="#0d3327"/>
+    </linearGradient>
+    <linearGradient id="vgmGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#vgmBg)" stroke="#10b981" stroke-width="2"/>
+  <!-- V Wings -->
+  <polygon points="60,82 32,32 46,32 60,60 74,32 88,32" fill="url(#vgmGreen)"/>
+  <polygon points="60,66 45,40 52,40 60,54 68,40 75,40" fill="#ffffff" opacity="0.9"/>
+  <text x="60" y="110" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="11" fill="#34d399" text-anchor="middle" letter-spacing="1.5">V GAMING</text>
+</svg>

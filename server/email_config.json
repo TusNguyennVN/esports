@@ -1,0 +1,12 @@
+{
+  "smtp_server": "smtp.gmail.com",
+  "smtp_port": 587,
+  "sender_name": "ESPORTS",
+  "sender_email": "chi25012014@gmail.com",
+  "sender_password": "thethaoesport@2008",
+  "emailjs": {
+    "service_id": "",
+    "template_id": "",
+    "public_key": ""
+  }
+}

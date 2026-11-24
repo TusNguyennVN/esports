@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chính Sách & Hướng Dẫn Khách Hàng - Esports</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header & Navbar liên kết các trang -->
+    <header class="header">
+        <a href="index.html" class="logo" title="Trang Chủ">
+            <i class="fa-solid fa-gamepad"></i><span>ESPORTS</span>
+        </a>
+        <nav class="navbar">
+            <a href="news.html"><i class="fa-solid fa-newspaper"></i> Tin Tức</a>
+            <div class="dropdown">
+                <a href="roster.html" class="dropdown-toggle">
+                    <i class="fa-solid fa-shield-halved"></i> Đội Tuyển 
+                    <i class="fa-solid fa-angle-down" style="font-size: 0.75rem;"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-column">
+                        <h4>Việt Nam</h4>
+                        <a href="roster.html?game=lq">Team Liên Quân Mobile</a>
+                        <a href="roster.html?game=ff">Team Free Fire</a>
+                        <a href="roster.html?game=pubg">Team PUBG Mobile</a>
+                        <a href="roster.html?game=fco">Team FC Online</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Quốc Tế</h4>
+                        <a href="roster.html?game=lol">Team League of Legends (LCK)</a>
+                        <a href="roster.html?game=valorant">Team Valorant (Global)</a>
+                        <a href="roster.html?game=cs2">Team CS2 (Europe)</a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="store.html" class="store-nav-link">
+                <i class="fa-solid fa-cart-shopping"></i> 
+                <span>Cửa hàng</span>
+            </a>
+            <div class="dropdown">
+                <a href="wiki.html" class="dropdown-toggle">
+                    <i class="fa-solid fa-book-open"></i> Wiki & Thông Số 
+                    <i class="fa-solid fa-angle-down" style="font-size: 0.75rem;"></i>
+                </a>
+                <div class="dropdown-menu wiki-dropdown-menu">
+                    <div class="dropdown-column">
+                        <h4>Tướng & Nhân Vật</h4>
+                        <a href="wiki.html?tab=lol-champ">Tướng Liên Minh (LOL)</a>
+                        <a href="wiki.html?tab=lq-champ">Tướng Liên Quân Mobile</a>
+                        <a href="wiki.html?tab=ff-char">Nhân Vật Free Fire</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Trang Bị & Vũ Khí</h4>
+                        <a href="wiki.html?game=lol&type=equipment">Trang Bị LMHT</a>
+                        <a href="wiki.html?game=lq&type=equipment">Trang Bị Liên Quân</a>
+                        <a href="wiki.html?game=ff&type=equipment">Vũ Khí Free Fire</a>
+                    </div>
+                </div>
+            </div>
+            <a href="tournaments.html"><i class="fa-solid fa-trophy"></i> Giải Đấu</a>
+            <a href="practice.html"><i class="fa-solid fa-dumbbell"></i> Phòng Tập Luyện</a>
+            <a href="downloads.html"><i class="fa-solid fa-download"></i> Tải Game</a>
+        </nav>
+        <div class="header-right">
+            <!-- 1. Tìm kiếm -->
+            <div class="search-box" id="headerSearchBox">
+                <button type="button" class="search-icon-btn" id="searchToggleBtn" title="Tìm kiếm" aria-label="Tìm kiếm">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <input type="text" id="globalSearch" placeholder="Tìm kiếm...">
+            </div>
+
+            <!-- 2. Giỏ hàng đã thêm -->
+            <button type="button" class="header-action-btn" id="cartToggleBtn" title="Giỏ hàng" aria-label="Giỏ hàng">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </button>
+
+            <!-- 3. Chọn Ngôn ngữ -->
+            <div class="lang-dropdown" id="langDropdown">
+                <button type="button" class="header-action-btn" id="langToggleBtn" title="Ngôn ngữ" aria-label="Ngôn ngữ">
+                    <i class="fa-solid fa-globe"></i>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button type="button" class="lang-option active" data-lang="VI">🇻🇳 Tiếng Việt (VN)</button>
+                    <button type="button" class="lang-option" data-lang="EN">🇺🇸 English (EN)</button>
+                </div>
+            </div>
+
+            <!-- Tài khoản User Dropdown -->
+            <div class="user-menu-wrapper" id="userMenuWrapper">
+                <button type="button" class="header-action-btn account-btn" id="accountToggleBtn" title="Tài khoản" aria-label="Tài khoản">
+                    <i class="fa-solid fa-user" id="headerUserIcon"></i>
+                    <img src="images/faker_league_of_legends_esports.png" alt="Avatar" class="header-user-avatar" id="headerUserAvatar" style="display: none;">
+                </button>
+                <div class="user-profile-dropdown" id="userProfileDropdown">
+                    <div class="up-header">
+                        <img src="images/faker_league_of_legends_esports.png" alt="Avatar" class="up-avatar" id="upAvatarImg">
+                        <div class="up-info">
+                            <span class="up-name" id="upRiotId">Tài khoản</span>
+                            <span class="up-email" id="upEmail">Chưa đăng nhập</span>
+                        </div>
+                    </div>
+                    <div class="up-wallet-bar">
+                        <div class="up-wallet-left">
+                            <span class="up-wallet-label"><i class="fa-solid fa-wallet" style="color: #10b981;"></i> Số dư ví:</span>
+                            <span class="up-wallet-val" id="upWalletBalance">0 đ</span>
+                        </div>
+                        <a href="account.html?tab=wallet" class="up-wallet-btn">
+                            <i class="fa-solid fa-plus-circle"></i> Nạp
+                        </a>
+                    </div>
+                    <div class="up-links">
+                        <a href="account.html?tab=riot-id"><i class="fa-solid fa-id-badge" style="color: #00f0ff;"></i> Thông Tin ID</a>
+                        <a href="account.html?tab=wallet"><i class="fa-solid fa-wallet" style="color: #10b981;"></i> Nạp Tiền & Ví Điện Tử</a>
+                        <a href="account.html?tab=charity"><i class="fa-solid fa-hand-holding-heart" style="color: #ec4899;"></i> Quyên Góp Từ Thiện</a>
+                        <a href="account.html?tab=orders"><i class="fa-solid fa-box-open" style="color: #f59e0b;"></i> Lịch Sử Đơn Hàng</a>
+                        <a href="account.html?tab=security"><i class="fa-solid fa-shield-halved" style="color: #3b82f6;"></i> Bảo Mật & 2FA</a>
+                        <button type="button" class="up-logout-btn" id="upLogoutBtn">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút 3 gạch khi thu nhỏ màn hình -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Mở menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Slide-out Drawer -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <aside class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <a href="index.html" class="logo" title="Trang Chủ">
+                <i class="fa-solid fa-gamepad"></i><span>ESPORTS</span>
+            </a>
+            <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Đóng menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="drawer-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Tìm kiếm...">
+        </div>
+        <nav class="drawer-nav">
+            <a href="index.html"><i class="fa-solid fa-house"></i> Trang Chủ</a>
+            <a href="news.html"><i class="fa-solid fa-newspaper"></i> Tin Tức</a>
+            <button type="button" class="drawer-dropdown-btn" id="drawerTeamBtn">
+                <span><i class="fa-solid fa-shield-halved"></i> Đội Tuyển</span>
+                <i class="fa-solid fa-angle-down arrow"></i>
+            </button>
+            <div class="drawer-submenu" id="drawerTeamSubmenu">
+                <span class="sub-heading">Việt Nam</span>
+                <a href="roster.html?game=lq">Team Liên Quân Mobile</a>
+                <a href="roster.html?game=ff">Team Free Fire</a>
+                <a href="roster.html?game=pubg">Team PUBG Mobile</a>
+                <a href="roster.html?game=fco">Team FC Online</a>
+                <span class="sub-heading">Quốc Tế</span>
+                <a href="roster.html?game=lol">Team League of Legends (LCK)</a>
+                <a href="roster.html?game=valorant">Team Valorant (Global)</a>
+                <a href="roster.html?game=cs2">Team CS2 (Europe)</a>
+            </div>
+            <a href="store.html"><i class="fa-solid fa-cart-shopping"></i> Cửa Hàng</a>
+            <a href="wiki.html"><i class="fa-solid fa-book-open"></i> Wiki & Thông Số</a>
+            <a href="tournaments.html"><i class="fa-solid fa-trophy"></i> Giải Đấu</a>
+            <a href="practice.html"><i class="fa-solid fa-dumbbell"></i> Phòng Tập Luyện</a>
+            <a href="downloads.html" class="drawer-cta"><i class="fa-solid fa-download"></i> Tải Game</a>
+        </nav>
+    </aside>
+
+    <!-- TIÊU ĐỀ TRANG CHÍNH SÁCH -->
+    <div class="policy-page-header">
+        <h1><i class="fa-solid fa-circle-question" style="color: #00f0ff;"></i> Trung Tâm Hỗ Trợ & Chính Sách Khách Hàng</h1>
+        <p>Toàn bộ hướng dẫn đặt hàng, bảng quy đổi kích cỡ, bảo vệ dữ liệu cá nhân và cam kết dịch vụ của hệ thống Esports.</p>
+    </div>
+
+    <!-- KHUNG BỐ CỤC 2 CỘT: SIDEBAR TRÁI VÀ NỘI DUNG PHẢI -->
+    <main class="policy-container">
+        
+        <!-- CỘT TRÁI: DANH MỤC ĐIỀU HƯỚNG (ĐÚNG 7 MỤC Y HỆT HÌNH ẢNH) -->
+        <aside class="policy-sidebar">
+            <div class="policy-sidebar-title">
+                <i class="fa-solid fa-bars-staggered"></i> Menu Hỗ Trợ
+            </div>
+            <ul class="policy-nav-list">
+                <li>
+                    <button type="button" class="policy-nav-btn" data-policy="size">
+                        <i class="fa-solid fa-ruler-combined"></i> Hướng dẫn chọn size
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="policy-nav-btn" data-policy="return">
+                        <i class="fa-solid fa-rotate-left"></i> Chính sách đổi trả
+                    </button>
+                </li>
+                <li>
+                    <!-- MỤC PHÁT SÁNG NEON CYAN NHƯ TRONG ẢNH -->
+                    <button type="button" class="policy-nav-btn active" data-policy="privacy">
+                        <i class="fa-solid fa-shield-halved"></i> Chính sách bảo mật
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="policy-nav-btn" data-policy="order">
+                        <i class="fa-solid fa-cart-shopping"></i> Hướng dẫn mua hàng
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="policy-nav-btn" data-policy="inspection">
+                        <i class="fa-solid fa-box-open"></i> Chính sách kiểm hàng
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="policy-nav-btn" data-policy="payment">
+                        <i class="fa-solid fa-credit-card"></i> Hướng dẫn thanh toán
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="policy-nav-btn" data-policy="shipping">
+                        <i class="fa-solid fa-truck-fast"></i> Chính sách vận chuyển
+                    </button>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- CỘT PHẢI: CHI TIẾT NỘI DUNG TỪNG CHÍNH SÁCH -->
+        <section class="policy-content-box">
+            
+            <!-- 1. HƯỚNG DẪN CHỌN SIZE -->
+            <article class="policy-panel" id="policy-size">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-ruler-combined" style="color: #00f0ff;"></i> Hướng Dẫn Chọn Kích Cỡ (Size Guide)</h2>
+                    <p>Bảng thông số kích thước chuẩn xác dành cho Áo đấu Pro Jersey và phụ kiện Esports 2026.</p>
+                </div>
+                <div class="policy-body">
+                    <p>Để đảm bảo trang phục thi đấu vừa vặn, thoải mái tối đa khi chơi game hoặc tham gia các sự kiện offline, bạn hãy tham khảo bảng quy đổi kích cỡ chuẩn dưới đây:</p>
+                    
+                    <h3><i class="fa-solid fa-shirt"></i> Bảng Thông Số Áo Đấu Esports Pro</h3>
+                    <div class="size-table-wrapper">
+                        <table class="size-table">
+                            <thead>
+                                <tr>
+                                    <th>Kích Cỡ</th>
+                                    <th>Chiều Cao (cm)</th>
+                                    <th>Cân Nặng (kg)</th>
+                                    <th>Vòng Ngực (cm)</th>
+                                    <th>Chiều Dài Áo (cm)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>S</strong></td>
+                                    <td>1m50 - 1m62</td>
+                                    <td>45 - 55 kg</td>
+                                    <td>88 - 92</td>
+                                    <td>66</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>M</strong></td>
+                                    <td>1m63 - 1m70</td>
+                                    <td>56 - 65 kg</td>
+                                    <td>93 - 98</td>
+                                    <td>69</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>L</strong></td>
+                                    <td>1m71 - 1m77</td>
+                                    <td>66 - 75 kg</td>
+                                    <td>99 - 104</td>
+                                    <td>72</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>XL</strong></td>
+                                    <td>1m78 - 1m84</td>
+                                    <td>76 - 85 kg</td>
+                                    <td>105 - 110</td>
+                                    <td>75</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>XXL</strong></td>
+                                    <td>Trên 1m85</td>
+                                    <td>86 - 98 kg</td>
+                                    <td>111 - 118</td>
+                                    <td>78</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="policy-alert-box">
+                        <strong>💡 Mẹo chọn size game thủ:</strong>
+                        <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+                            <li>Nếu số đo của bạn nằm giữa hai kích cỡ, hãy ưu tiên chọn <strong>kích cỡ lớn hơn</strong> để có cảm giác thoải mái, rộng rãi khi ngồi thi đấu hàng giờ.</li>
+                            <li>Chất liệu áo sử dụng vải sợi mè thể thao thoáng khí Poly-Spandex co giãn 4 chiều, hỗ trợ thấm hút mồ hôi cực nhanh.</li>
+                        </ul>
+                    </div>
+
+                    <h3><i class="fa-solid fa-arrows-to-dot"></i> Cách Tự Đo Kích Thước Tại Nhà</h3>
+                    <ol>
+                        <li><strong>Vòng ngực:</strong> Dùng thước dây đo quanh phần nở nhất của ngực, giữ thước dây ngang bằng phẳng.</li>
+                        <li><strong>Chiều dài áo:</strong> Đo từ điểm cao nhất của vai thẳng xuống phần dưới mép áo mong muốn.</li>
+                        <li><strong>Chiều rộng vai:</strong> Đo từ đầu mép vai bên trái sang mép vai bên phải qua phần sau gáy.</li>
+                    </ol>
+                </div>
+            </article>
+
+            <!-- 2. CHÍNH SÁCH ĐỔI TRẢ -->
+            <article class="policy-panel" id="policy-return">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-rotate-left" style="color: #00f0ff;"></i> Chính Sách Đổi Trả & Hoàn Tiền</h2>
+                    <p>Cam kết bảo vệ quyền lợi tối đa của game thủ với quy trình đổi trả trong 7 ngày hoàn toàn minh bạch.</p>
+                </div>
+                <div class="policy-body">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Thời Gian & Điều Kiện Đổi Trả</h3>
+                    <p>Khách hàng có quyền yêu cầu đổi kích cỡ, đổi mẫu mã hoặc hoàn tiền trong vòng <strong>07 ngày</strong> kể từ thời điểm nhận hàng thành công theo các điều kiện:</p>
+                    <ul>
+                        <li>Sản phẩm còn nguyên tem mác, bao bì chính hãng của Esports Store.</li>
+                        <li>Chưa qua sử dụng, chưa qua giặt ủi và không có mùi lạ (nước hoa, thuốc lá,...).</li>
+                        <li>Sản phẩm gặp lỗi do nhà sản xuất (rách chỉ, in sai tên/số áo, lỗi vi mạch đối với thiết bị gaming gear).</li>
+                        <li>Giao sai sản phẩm, sai kích cỡ so với đơn đặt hàng trên hệ thống.</li>
+                    </ul>
+
+                    <h3><i class="fa-solid fa-list-check"></i> Quy Trình Đổi Trả 3 Bước Đơn Giản</h3>
+                    <div class="policy-step-grid">
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">1</span>
+                            <div class="policy-step-title">Liên Hệ Hỗ Trợ</div>
+                            <div class="policy-step-desc">Nhắn tin qua Zalo hoặc gọi Hotline 0975 477 485, cung cấp mã đơn hàng.</div>
+                        </div>
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">2</span>
+                            <div class="policy-step-title">Gửi Hàng Về Kho</div>
+                            <div class="policy-step-desc">Đóng gói sản phẩm cẩn thận, shipper sẽ đến tận nhà lấy hàng đổi trả.</div>
+                        </div>
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">3</span>
+                            <div class="policy-step-title">Nhận Hàng Mới / Hoàn Tiền</div>
+                            <div class="policy-step-desc">Nhận sản phẩm mới sau 2-3 ngày hoặc nhận hoàn tiền 100% về ví web.</div>
+                        </div>
+                    </div>
+
+                    <div class="policy-alert-box">
+                        <strong>Lưu ý về chi phí vận chuyển:</strong>
+                        <p style="margin: 4px 0 0 0;">Nếu lỗi phát sinh từ phía Esports Store (hàng lỗi, gửi sai mẫu), chúng tôi chịu <strong>100% phí vận chuyển 2 chiều</strong>. Nếu khách hàng đổi ý muốn đổi size hoặc mẫu khác, quý khách vui lòng thanh toán phí chuyển phát phát sinh.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3. CHÍNH SÁCH BẢO MẬT (ACTIVE THEO HÌNH CỦA BẠN) -->
+            <article class="policy-panel active" id="policy-privacy">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-shield-halved" style="color: #00f0ff;"></i> Chính Sách Bảo Mật Thông Tin</h2>
+                    <p>Cam kết bảo vệ tuyệt đối dữ liệu người dùng, thông tin giao dịch và tài khoản Esports ID.</p>
+                </div>
+                <div class="policy-body">
+                    <p>Chào mừng bạn đến với Cổng thể thao điện tử Esports. Chúng tôi cam kết bảo vệ quyền riêng tư và dữ liệu cá nhân của mọi thành viên theo các quy chuẩn bảo mật công nghệ thông tin cao nhất.</p>
+
+                    <h3><i class="fa-solid fa-database"></i> 1. Thông Tin Thu Thập</h3>
+                    <p>Khi bạn đăng ký tài khoản và mua sắm tại cửa hàng, hệ thống thu thập các thông tin tối thiểu cần thiết:</p>
+                    <ul>
+                        <li><strong>Thông tin định danh:</strong> Tên đăng nhập, Tên trong game (Game Name), Mã thẻ Tagline (Riot-style ID).</li>
+                        <li><strong>Thông tin liên hệ:</strong> Địa chỉ Email xác thực thật, Số điện thoại và Địa chỉ giao hàng khi đặt đơn.</li>
+                        <li><strong>Dữ liệu giao dịch:</strong> Lịch sử nạp tiền VietQR, các giao dịch mua sắm vật phẩm và quyền đóng góp từ thiện (không lưu thông tin mật khẩu ngân hàng của bạn).</li>
+                    </ul>
+
+                    <h3><i class="fa-solid fa-lock"></i> 2. Tiêu Chuẩn Bảo Mật Công Nghệ</h3>
+                    <ul>
+                        <li><strong>Mã hóa mật khẩu:</strong> Mật khẩu của bạn được băm một chiều bằng thuật toán <strong>SHA-256</strong> trước khi lưu vào cơ sở dữ liệu SQLite, không một ai (kể cả quản trị viên) có thể đọc được mật khẩu gốc.</li>
+                        <li><strong>Xác thực 2 lớp (2FA):</strong> Cung cấp tính năng mã OTP gửi trực tiếp về Gmail thật để xác nhận mỗi khi đăng nhập hoặc thực hiện các giao dịch quan trọng.</li>
+                        <li><strong>Giao thức an toàn:</strong> Sử dụng kết nối HTTPS mã hóa toàn bộ dữ liệu truyền tải giữa máy tính người dùng và máy chủ.</li>
+                    </ul>
+
+                    <h3><i class="fa-solid fa-handshake-slash"></i> 3. Cam Kết Không Chia Sẻ Dữ Liệu</h3>
+                    <p>Chúng tôi cam kết <strong>không bao giờ bán, trao đổi hoặc cho thuê thông tin cá nhân</strong> của bạn cho bên thứ ba vì mục đích tiếp thị thương mại rác. Dữ liệu chỉ được chia sẻ duy nhất cho đơn vị vận chuyển (Esports Express) để phục vụ việc giao hàng tận nơi cho bạn.</p>
+
+                    <div class="policy-alert-box">
+                        <strong>Quyền kiểm soát của bạn:</strong>
+                        <p style="margin: 4px 0 0 0;">Bạn có toàn quyền chỉnh sửa ảnh đại diện, tên hiển thị, mật khẩu trong trang <a href="account.html" style="color: #00f0ff; font-weight: 700;">Cổng Tài Khoản (account.html)</a> hoặc yêu cầu xóa vĩnh viễn tài khoản khỏi hệ thống máy chủ bất kỳ lúc nào.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4. HƯỚNG DẪN MUA HÀNG -->
+            <article class="policy-panel" id="policy-order">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-cart-shopping" style="color: #00f0ff;"></i> Hướng Dẫn Mua Hàng & Đặt Hàng Trực Tuyến</h2>
+                    <p>Các bước mua sắm thiết bị gaming, áo đấu thi đấu và phụ kiện nhanh chóng chỉ trong 1 phút.</p>
+                </div>
+                <div class="policy-body">
+                    <h3><i class="fa-solid fa-layer-group"></i> Quy Trình Đặt Hàng 4 Bước</h3>
+                    <div class="policy-step-grid">
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">1</span>
+                            <div class="policy-step-title">Chọn Sản Phẩm</div>
+                            <div class="policy-step-desc">Truy cập trang Cửa Hàng, lựa chọn sản phẩm và chọn kích cỡ (Size) phù hợp.</div>
+                        </div>
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">2</span>
+                            <div class="policy-step-title">Thêm Vào Giỏ</div>
+                            <div class="policy-step-desc">Bấm "Thêm Vào Giỏ", giỏ hàng sẽ tự động cập nhật số lượng và mở thanh toán.</div>
+                        </div>
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">3</span>
+                            <div class="policy-step-title">Điền Thông Tin</div>
+                            <div class="policy-step-desc">Nhập họ tên, số điện thoại, địa chỉ nhận hàng và nhập mã ưu đãi (nếu có).</div>
+                        </div>
+                        <div class="policy-step-card">
+                            <span class="policy-step-num">4</span>
+                            <div class="policy-step-title">Xác Nhận Đơn</div>
+                            <div class="policy-step-desc">Chọn hình thức thanh toán (COD, Ví tiền, VietQR) và bấm "Xác Nhận Đặt Hàng".</div>
+                        </div>
+                    </div>
+
+                    <h3><i class="fa-solid fa-tags"></i> Sử Dụng Mã Khuyến Mãi (Voucher)</h3>
+                    <p>Khi đặt hàng, bạn có thể áp dụng các mã ưu đãi độc quyền:</p>
+                    <ul>
+                        <li>Mã <strong><code>ESPORTS</code></strong>: Giảm trực tiếp 10% trên tổng giá trị đơn hàng.</li>
+                        <li>Mã <strong><code>FREESHIP</code></strong>: Miễn phí vận chuyển toàn quốc cho mọi giá trị đơn hàng.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 5. CHÍNH SÁCH KIỂM HÀNG -->
+            <article class="policy-panel" id="policy-inspection">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-box-open" style="color: #00f0ff;"></i> Chính Sách Kiểm Hàng (Đồng Kiểm)</h2>
+                    <p>Minh bạch và bảo vệ tối đa quyền lợi của khách hàng khi nhận kiện hàng từ nhân viên giao vận.</p>
+                </div>
+                <div class="policy-body">
+                    <h3><i class="fa-solid fa-clipboard-check"></i> Quy Định Đồng Kiểm Cùng Shipper</h3>
+                    <p>Khách hàng được quyền <strong>mở bao bì ngoài và đồng kiểm tra hàng</strong> cùng nhân viên giao hàng trước khi tiến hành thanh toán tiền mặt (COD) hoặc ký nhận:</p>
+                    <ul>
+                        <li><strong>Các hạng mục được kiểm tra:</strong> Số lượng sản phẩm, mẫu mã, màu sắc, size áo và ngoại quan nguyên vẹn (không rách, vỡ, móp méo).</li>
+                        <li><strong>Các hạng mục chưa hỗ trợ tại chỗ:</strong> Không thử mặc thử đồ tại chỗ hoặc cắm điện test tính năng các thiết bị điện tử khi nhân viên giao vận đang chờ.</li>
+                    </ul>
+
+                    <h3><i class="fa-solid fa-video"></i> Khuyến Nghị Quay Video Mở Hộp (Unboxing)</h3>
+                    <div class="policy-alert-box">
+                        <strong>Lưu ý quan trọng:</strong>
+                        <p style="margin: 4px 0 0 0;">Quý khách vui lòng quay video clip liên tục từ lúc bắt đầu khui kiện hàng (thấy rõ mã vận đơn và 6 mặt bưu kiện). Đây là bằng chứng pháp lý quan trọng nhất để chúng tôi hỗ trợ đổi mới 1-đổi-1 ngay lập tức nếu xảy ra trường hợp thất lạc hoặc hư hỏng trong quá trình vận chuyển.</p>
+                    </div>
+
+                    <h3><i class="fa-solid fa-ban"></i> Quyền Từ Chối Nhận Hàng</h3>
+                    <p>Nếu phát hiện kiện hàng bị rách nát, ướt sũng, có dấu hiệu bị cạy mở hoặc sản phẩm bên trong không đúng như đơn hàng bạn đã đặt, bạn có quyền <strong>từ chối nhận hàng</strong> ngay tại thời điểm đó mà không mất bất kỳ chi phí nào.</p>
+                </div>
+            </article>
+
+            <!-- 6. HƯỚNG DẪN THANH TOÁN -->
+            <article class="policy-panel" id="policy-payment">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-credit-card" style="color: #00f0ff;"></i> Hướng Dẫn Thanh Toán</h2>
+                    <p>Hỗ trợ đa dạng phương thức thanh toán an toàn, bảo mật và tiện lợi 24/7.</p>
+                </div>
+                <div class="policy-body">
+                    <h3><i class="fa-solid fa-wallet"></i> 4 Phương Thức Thanh Toán Linh Hoạt</h3>
+                    
+                    <h4>1. Tiền mặt khi nhận hàng (COD)</h4>
+                    <p>Phương thức thanh toán an toàn và phổ biến nhất. Bạn chỉ cần trả tiền mặt trực tiếp cho nhân viên giao hàng sau khi đã kiểm tra sản phẩm ưng ý.</p>
+
+                    <h4>2. Ví Tiền Esports ID (Khuyên dùng)</h4>
+                    <p>Sử dụng trực tiếp số dư ví điện tử trên website của bạn. Nạp tiền qua mã VietQR tự động để nhận thêm <strong>5% đến 15% tiền thưởng bonus</strong> vào tài khoản.</p>
+
+                    <h4>3. Chuyển khoản VietQR tự động 24/7</h4>
+                    <p>Khi chọn chuyển khoản, hệ thống sẽ tự động tạo một mã QR động kèm số tiền và nội dung chuyển khoản chính xác. Bạn chỉ cần mở ứng dụng ngân hàng bất kỳ (Vietcombank, MBBank, Techcombank,...) quét mã là đơn hàng tự động kích hoạt thành công sau 3 giây.</p>
+
+                    <h4>4. Ví điện tử MoMo & ZaloPay</h4>
+                    <p>Thanh toán nhanh chóng qua các cổng ví điện tử hàng đầu Việt Nam có bảo mật sinh trắc học Face ID / Vân tay.</p>
+                </div>
+            </article>
+
+            <!-- 7. CHÍNH SÁCH VẬN CHUYỂN -->
+            <article class="policy-panel" id="policy-shipping">
+                <div class="policy-header">
+                    <h2><i class="fa-solid fa-truck-fast" style="color: #00f0ff;"></i> Chính Sách Vận Chuyển & Giao Hàng</h2>
+                    <p>Dịch vụ giao vận Esports Express tốc độ cao, hỗ trợ theo dõi đơn hàng toàn quốc.</p>
+                </div>
+                <div class="policy-body">
+                    <h3><i class="fa-solid fa-stopwatch"></i> Thời Gian Giao Hàng Ước Tính</h3>
+                    <ul>
+                        <li><strong>Khu vực Nội thành (Hà Nội & TP. Hồ Chí Minh):</strong> Giao nhanh trong <strong>1 - 2 ngày làm việc</strong>.</li>
+                        <li><strong>Khu vực Ngoại thành & Các Tỉnh thành khác:</strong> Giao hàng từ <strong>2 - 4 ngày làm việc</strong>.</li>
+                        <li><strong>Vùng sâu vùng xa hoặc hải đảo:</strong> Thời gian có thể kéo dài từ 4 - 6 ngày tùy theo điều kiện thời tiết.</li>
+                    </ul>
+
+                    <h3><i class="fa-solid fa-receipt"></i> Biểu Phí Vận Chuyển</h3>
+                    <div class="policy-alert-box">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>Phí ship tiêu chuẩn toàn quốc:</strong> Đồng giá <strong>30.000 đ</strong> cho mọi đơn hàng dưới 500k.</li>
+                            <li><strong>MIỄN PHÍ VẬN CHUYỂN (FREESHIP):</strong> Áp dụng tự động cho tất cả đơn hàng có giá trị từ <strong>500.000 đ trở lên</strong> hoặc khách hàng áp dụng mã giảm giá <code>FREESHIP</code> khi thanh toán!</li>
+                        </ul>
+                    </div>
+
+                    <h3><i class="fa-solid fa-location-crosshairs"></i> Tra Cứu Hành Trình Đơn Hàng</h3>
+                    <p>Sau khi đặt hàng thành công, bạn sẽ nhận được một Mã Đơn Hàng (ví dụ: <code>#ESP-89214</code>). Bạn có thể truy cập mục <strong>Lịch Sử Đơn Hàng</strong> trong Cổng Tài Khoản để xem trạng thái giao vận theo thời gian thực.</p>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+    <!-- FOOTER CHUYÊN NGHIỆP -->
+    <footer class="footer-section">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-logo">
+                    <i class="fa-solid fa-gamepad"></i><span>ESPORTS</span>
+                </div>
+                <p class="company-name">CÔNG TY TNHH ESPORTS VIỆT NAM</p>  
+                <ul class="contact-info">
+                    <li><i class="fa-solid fa-location-dot"></i> <strong>Việt Nam:</strong> Học Viện Công Nghệ Bưu chính viễn thông</li>
+                    <li><i class="fa-solid fa-phone"></i> <strong>Số điện thoại:</strong> 0975 477 485</li>
+                    <li><i class="fa-solid fa-envelope"></i> <strong>Email:</strong> support@esports.gg</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Về Chúng Tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Giới thiệu</a></li>
+                    <li><a href="roster.html">Đội ngũ tuyển thủ</a></li>
+                    <li><a href="news.html">Tin tức sự kiện</a></li>
+                    <li><a href="#">Hợp tác tài trợ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Hỗ Trợ Khách Hàng</h3>
+                <ul class="footer-links">
+                    <li><a href="policy.html?tab=size">Hướng dẫn chọn size</a></li>
+                    <li><a href="policy.html?tab=return">Chính sách đổi trả</a></li>
+                    <li><a href="policy.html?tab=privacy">Chính sách bảo mật</a></li>
+                    <li><a href="policy.html?tab=order">Hướng dẫn mua hàng</a></li>
+                    <li><a href="policy.html?tab=inspection">Chính sách kiểm hàng</a></li>
+                    <li><a href="policy.html?tab=payment">Hướng dẫn thanh toán</a></li>
+                    <li><a href="policy.html?tab=shipping">Chính sách vận chuyển</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col newsletter-col">
+                <h3>Đăng Ký Nhận Tin</h3>
+                <p>Bạn có muốn nhận khuyến mãi đặc biệt và tin tức giải đấu? Đăng ký ngay.</p>
+                <form class="footer-form" id="footerNewsletter">
+                    <input type="email" placeholder="Nhập địa chỉ email..." required>
+                    <button type="submit">Đăng ký</button>
+                </form>
+                
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-solid fa-comment"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 ESPORTS Gaming Platform. Bảo lưu mọi quyền.</p>
+        </div>
+    </footer>
+
+    <!-- Các nút nổi hỗ trợ bên phải -->
+    <div class="floating-actions">
+        <a href="#" class="float-btn scroll-top"><i class="fa-solid fa-chevron-up"></i></a>
+        <a href="tel:0975477485" class="float-btn phone-btn"><i class="fa-solid fa-phone"></i></a>
+        <a href="https://zalo.me" target="_blank" class="float-btn zalo-btn">Zalo</a>
+    </div>
+
+    <!-- Nạp dữ liệu tách rời & Script logic chính -->
+    <script src="assets/js/data/news-data.js"></script>
+    <script src="assets/js/data/wiki-data.js"></script>
+    <script src="assets/js/data/roster-data.js"></script>
+    <script src="assets/js/script.js?v=3.0.0"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="gengBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14120e"/>
+      <stop offset="100%" stop-color="#241e15"/>
+    </linearGradient>
+    <linearGradient id="gengGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#aa8a59"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#gengBg)" stroke="#aa8a59" stroke-width="2"/>
+  <!-- Gen.G Iconic Shield / Tiger Crest -->
+  <polygon points="60,22 88,34 84,68 60,84 36,68 32,34" fill="#17140e" stroke="url(#gengGold)" stroke-width="2.5"/>
+  <path d="M48,46 L60,38 L72,46 L68,64 L60,70 L52,64 Z" fill="none" stroke="url(#gengGold)" stroke-width="1.8"/>
+  <text x="60" y="58" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="url(#gengGold)" text-anchor="middle" letter-spacing="1">GEN.G</text>
+  <text x="60" y="110" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="9" fill="#eab308" text-anchor="middle" letter-spacing="1.5">GEN.G ESPORTS</text>
+</svg>

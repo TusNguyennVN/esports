@@ -1,0 +1,650 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esports - Trung Tâm Quản Trị Hệ Thống (Admin Control Center)</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+
+    <!-- BẢNG ĐIỀU KHIỂN CHÍNH (ADMIN DASHBOARD TRỰC TIẾP) -->
+    <div id="adminMainPanel">
+        
+        <!-- TOP NAVBAR -->
+        <header class="admin-navbar">
+            <div class="admin-nav-left">
+                <a href="admin.html" class="admin-logo">
+                    <i class="fa-solid fa-gamepad"></i> <span>ESPORTS</span>
+                </a>
+                <span class="admin-tag"><i class="fa-solid fa-bolt"></i> ADMIN CONTROL CENTER</span>
+            </div>
+
+            <div class="admin-nav-right">
+                <div class="admin-clock-badge">
+                    <i class="fa-solid fa-clock"></i> <span id="adminLiveClock">--:--:--</span>
+                </div>
+                <button type="button" class="btn-client-site" id="adminChangeMasterPassBtn" onclick="openChangeMasterPassModal()" title="Đổi mật khẩu bảo mật Quản trị viên" style="background: rgba(0, 240, 255, 0.15); border-color: rgba(0, 240, 255, 0.4); color: #00f0ff;">
+                    <i class="fa-solid fa-key"></i> Đổi Mật Khẩu Admin
+                </button>
+                <a href="index.html" target="_blank" class="btn-client-site" title="Mở trang web trong tab mới">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Website
+                </a>
+                <button type="button" class="btn-admin-logout" id="adminLogoutBtn" onclick="logoutAdmin(event)" title="Thoát khỏi bảng quản trị và quay về website (vẫn giữ đăng nhập tài khoản)">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Thoát Quản Trị
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT: SIDEBAR + CONTENT -->
+        <div class="admin-layout">
+            
+            <!-- SIDEBAR -->
+            <aside class="admin-sidebar">
+                <div class="admin-sidebar-nav">
+                    <span class="admin-sidebar-label">Bảng Điều Khiển</span>
+                    <button type="button" class="admin-nav-item active" data-tab="tab-overview" onclick="switchAdminTab('tab-overview')">
+                        <i class="fa-solid fa-chart-line"></i> <span>Tổng Quan</span>
+                    </button>
+                    <button type="button" class="admin-nav-item" data-tab="tab-users" onclick="switchAdminTab('tab-users')">
+                        <i class="fa-solid fa-users-gear"></i> <span>Quản Lý Tài Khoản</span>
+                    </button>
+                    <button type="button" class="admin-nav-item" data-tab="tab-topup" onclick="switchAdminTab('tab-topup')">
+                        <i class="fa-solid fa-wallet"></i> <span>Quản Lý Nạp Tiền</span>
+                    </button>
+                    <button type="button" class="admin-nav-item" data-tab="tab-visitors" onclick="switchAdminTab('tab-visitors')">
+                        <i class="fa-solid fa-chart-pie"></i> <span>Nhật Ký Truy Cập</span>
+                    </button>
+                    <button type="button" class="admin-nav-item" data-tab="tab-orders" onclick="switchAdminTab('tab-orders')">
+                        <i class="fa-solid fa-box-open"></i> <span>Đơn Hàng & Từ Thiện</span>
+                    </button>
+                </div>
+
+                <div class="admin-sidebar-info">
+                    <p style="margin: 0 0 6px 0;"><span class="status-dot"></span> <strong>Hệ Thống Trực Tuyến</strong></p>
+                    <p style="margin: 0; font-size: 0.74rem;">Bộ nhớ: Trình duyệt LocalStorage<br>Phiên bản: Esports v2.6 Pro</p>
+                </div>
+            </aside>
+
+            <!-- CONTENT AREA -->
+            <main class="admin-content-area">
+
+                <!-- GREETING BANNER -->
+                <div class="admin-hero-banner">
+                    <div class="admin-hero-title">
+                        <h1>Xin chào, Quản Trị Viên! 👋</h1>
+                        <p>Theo dõi thời gian thực lượt truy cập, tạo tài khoản và cộng/trừ số dư ví thành viên.</p>
+                    </div>
+                    <div class="admin-hero-actions">
+                        <button type="button" class="btn btn-primary" id="openCreateUserModalBtn">
+                            <i class="fa-solid fa-user-plus"></i> + Tạo Tài Khoản Mới
+                        </button>
+                        <button type="button" class="btn btn-outline" id="refreshDashboardBtn" onclick="initAdminDashboard()" title="Tải lại số liệu">
+                            <i class="fa-solid fa-arrows-rotate"></i> Làm Mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TOP KPI STATS METRICS -->
+                <div class="admin-kpi-grid">
+                    <div class="kpi-card cyan">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Tổng Lượt Truy Cập</span>
+                            <div class="kpi-icon-wrap"><i class="fa-solid fa-eye"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiTotalVisits">0</div>
+                        <div class="kpi-subtext">
+                            <span class="kpi-badge up"><i class="fa-solid fa-arrow-trend-up"></i> Hôm nay</span> Toàn hệ thống
+                        </div>
+                    </div>
+
+                    <div class="kpi-card green">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Đang Trực Tuyến</span>
+                            <div class="kpi-icon-wrap"><i class="fa-solid fa-signal"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiOnlineNow">1</div>
+                        <div class="kpi-subtext">
+                            <span class="kpi-badge live"><i class="fa-solid fa-circle"></i> Live</span> Người dùng đang duyệt web
+                        </div>
+                    </div>
+
+                    <div class="kpi-card blue">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Tài Khoản Đã Tạo</span>
+                            <div class="kpi-icon-wrap"><i class="fa-solid fa-users"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiTotalUsers">0</div>
+                        <div class="kpi-subtext">
+                            <span>Esports ID thành viên</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card yellow">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Tổng Tiền Nạp Ví</span>
+                            <div class="kpi-icon-wrap"><i class="fa-solid fa-coins"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiTotalRevenue">0 đ</div>
+                        <div class="kpi-subtext">
+                            <span>Qua VietQR / Nạp Admin</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card purple">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Đơn Hàng Shop</span>
+                            <div class="kpi-icon-wrap"><i class="fa-solid fa-cart-shopping"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiTotalOrders">0</div>
+                        <div class="kpi-subtext">
+                            <span>Đã đặt tại Cửa hàng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 1: TỔNG QUAN (OVERVIEW) -->
+                <div class="admin-panel-view active" id="tab-overview">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                        
+                        <!-- LỊCH SỬ NẠP TIỀN MỚI NHẤT -->
+                        <div class="admin-card">
+                            <div class="admin-card-header">
+                                <h3><i class="fa-solid fa-bolt"></i> Nạp Tiền & Giao Dịch Gần Nhất</h3>
+                                <button type="button" class="btn btn-outline" onclick="switchAdminTab('tab-topup')" style="padding: 4px 10px; font-size: 0.78rem;">Xem tất cả</button>
+                            </div>
+                            <div class="admin-table-wrap">
+                                <table class="admin-table" id="recentTopupTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã GD</th>
+                                            <th>Người Nhận</th>
+                                            <th>Số Tiền</th>
+                                            <th>Thời Gian</th>
+                                            <th>Trạng Thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentTopupTableBody">
+                                        <!-- Dữ liệu JS điền vào -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- THÀNH VIÊN MỚI ĐĂNG KÝ -->
+                        <div class="admin-card">
+                            <div class="admin-card-header">
+                                <h3><i class="fa-solid fa-user-clock"></i> Thành Viên Mới Đăng Ký</h3>
+                                <button type="button" class="btn btn-outline" onclick="switchAdminTab('tab-users')" style="padding: 4px 10px; font-size: 0.78rem;">Quản lý</button>
+                            </div>
+                            <div class="admin-table-wrap">
+                                <table class="admin-table" id="recentUsersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Tài Khoản</th>
+                                            <th>Email</th>
+                                            <th>Số Dư Ví</th>
+                                            <th>Ngày Tạo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentUsersTableBody">
+                                        <!-- Dữ liệu JS điền vào -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- NHẬT KÝ TRUY CẬP GẦN ĐÂY -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Người Dùng Truy Cập Trực Tuyến</h3>
+                            <button type="button" class="btn btn-outline" onclick="switchAdminTab('tab-visitors')" style="padding: 4px 10px; font-size: 0.78rem;">Xem toàn bộ</button>
+                        </div>
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Thời Gian</th>
+                                        <th>Trang Đã Xem</th>
+                                        <th>Người Dùng</th>
+                                        <th>Thiết Bị & Trình Duyệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overviewVisitorLogsBody">
+                                    <!-- Dữ liệu JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TAB 2: QUẢN LÝ TÀI KHOẢN (USER MANAGEMENT) -->
+                <div class="admin-panel-view" id="tab-users">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-users-gear"></i> Danh Sách Toàn Bộ Tài Khoản (<span id="userCountBadge">0</span>)</h3>
+                            <div class="admin-table-actions">
+                                <input type="text" id="searchUserInput" class="admin-search-input" placeholder="Tìm theo tên in-game, email...">
+                                <button type="button" class="btn btn-primary" onclick="openCreateUserModal()">
+                                    <i class="fa-solid fa-user-plus"></i> + Tạo Tài Khoản Mới
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>In-game ID</th>
+                                        <th>Email / SĐT</th>
+                                        <th>Game Chính</th>
+                                        <th>Số Dư Ví</th>
+                                        <th>Trạng Thái</th>
+                                        <th>Ngày Tạo</th>
+                                        <th style="text-align: center;">Hành Động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminUsersTableBody">
+                                    <!-- Danh sách tài khoản -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: QUẢN LÝ NẠP TIỀN & VÍ (TOPUP MANAGER) -->
+                <div class="admin-panel-view" id="tab-topup">
+                    
+                    <!-- FORM CỘNG TIỀN TRỰC TIẾP CHO USER -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-hand-holding-dollar"></i> Cộng Tiền / Nạp Ví Trực Tiếp Cho Thành Viên</h3>
+                            <span class="badge-status active"><i class="fa-solid fa-bolt"></i> CẬP NHẬT TỨC THÌ</span>
+                        </div>
+                        <p style="color: #94a3b8; font-size: 0.85rem; margin-top: -8px; margin-bottom: 16px;">
+                            Chọn tài khoản người dùng và nhập số tiền để cộng hoặc trừ trực tiếp vào số dư ví của họ trên toàn hệ thống.
+                        </p>
+
+                        <form class="topup-direct-form" id="adminDirectTopupForm" onsubmit="return false;">
+                            <div class="topup-field-group">
+                                <label for="directTopupUserSelect"><i class="fa-solid fa-user"></i> Chọn tài khoản thành viên:</label>
+                                <select id="directTopupUserSelect" required>
+                                    <!-- Danh sách options -->
+                                </select>
+                            </div>
+
+                            <div class="topup-field-group">
+                                <label for="directTopupAmountInput"><i class="fa-solid fa-money-bill-wave"></i> Số tiền (VNĐ):</label>
+                                <input type="number" id="directTopupAmountInput" placeholder="Ví dụ: 100000" min="1000" step="1000" required>
+                            </div>
+
+                            <div class="topup-field-group">
+                                <label for="directTopupMemoInput"><i class="fa-solid fa-file-invoice"></i> Lý do / Nội dung:</label>
+                                <input type="text" id="directTopupMemoInput" placeholder="Ví dụ: Admin nạp tiền VietQR, Thưởng giải...">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" id="confirmDirectTopupBtn" style="padding: 10px 20px; font-weight: 800; background: linear-gradient(135deg, #10b981, #059669);">
+                                <i class="fa-solid fa-plus-circle"></i> Nạp Ngay
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- BẢNG LỊCH SỬ NẠP TIỀN VÀ GIAO DỊCH -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Nạp Tiền & Biến Động Số Dư</h3>
+                            <div class="admin-table-actions">
+                                <select id="filterTransactionType" class="admin-search-input" style="min-width: 160px;">
+                                    <option value="ALL">Tất cả giao dịch</option>
+                                    <option value="TOPUP">Nạp tiền VietQR / Admin</option>
+                                    <option value="SHOP">Mua hàng Shop</option>
+                                    <option value="CHARITY">Quyên góp từ thiện</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã Giao Dịch</th>
+                                        <th>Tài Khoản</th>
+                                        <th>Loại Giao Dịch</th>
+                                        <th>Số Tiền</th>
+                                        <th>Thời Gian</th>
+                                        <th>Trạng Thái</th>
+                                        <th>Thao Tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminTransactionsTableBody">
+                                    <!-- Dữ liệu giao dịch -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TAB 4: NHẬT KÝ NGƯỜI TRUY CẬP (VISITOR ANALYTICS) -->
+                <div class="admin-panel-view" id="tab-visitors">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Thống Kê Thiết Bị & Lượt Truy Cập</h3>
+                            <button type="button" class="btn btn-outline" id="clearVisitorLogsBtn" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
+                                <i class="fa-solid fa-trash-can"></i> Xóa Toàn Bộ Lịch Sử
+                            </button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 22px;">
+                            <div style="background: #05070d; padding: 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.06);">
+                                <span style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">💻 Máy Tính (Desktop)</span>
+                                <h2 style="color: #00f0ff; margin: 6px 0 0 0; font-size: 1.6rem;" id="statDesktopRatio">78%</h2>
+                            </div>
+                            <div style="background: #05070d; padding: 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.06);">
+                                <span style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">📱 Điện Thoại (Mobile)</span>
+                                <h2 style="color: #10b981; margin: 6px 0 0 0; font-size: 1.6rem;" id="statMobileRatio">22%</h2>
+                            </div>
+                            <div style="background: #05070d; padding: 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.06);">
+                                <span style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">🌐 Trình Duyệt Phổ Biến</span>
+                                <h4 style="color: #f59e0b; margin: 8px 0 0 0; font-size: 1.1rem;" id="statTopBrowser">Chrome / Cốc Cốc</h4>
+                            </div>
+                        </div>
+
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Thời Gian Truy Cập</th>
+                                        <th>Trang Đã Xem</th>
+                                        <th>Người Dùng</th>
+                                        <th>Thiết Bị & Trình Duyệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminFullVisitorLogsBody">
+                                    <!-- Danh sách chi tiết lượt truy cập -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: ĐƠN HÀNG SHOP & TỪ THIỆN -->
+                <div class="admin-panel-view" id="tab-orders">
+                    <!-- BẢNG ĐƠN HÀNG SHOP -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-boxes-packing"></i> Quản Lý Đơn Hàng Cửa Hàng Shop (<span id="adminOrdersCount">0</span>)</h3>
+                        </div>
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã Đơn</th>
+                                        <th>Người Đặt / Nhận</th>
+                                        <th>Số Điện Thoại</th>
+                                        <th>Địa Chỉ Giao</th>
+                                        <th>Thanh Toán</th>
+                                        <th>Tổng Tiền</th>
+                                        <th>Chi Tiết Đơn</th>
+                                        <th>Trạng Thái</th>
+                                        <th>Thao Tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminShopOrdersBody">
+                                    <!-- Dữ liệu đơn hàng -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- BẢNG QUYÊN GÓP TỪ THIỆN -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fa-solid fa-hand-holding-heart"></i> Danh Sách Quyên Góp Quỹ Từ Thiện</h3>
+                        </div>
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Người Ủng Hộ</th>
+                                        <th>Chiến Dịch</th>
+                                        <th>Số Tiền</th>
+                                        <th>Lời Nhắn</th>
+                                        <th>Thời Gian</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminCharityTableBody">
+                                    <!-- Dữ liệu từ thiện -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+    </div>
+
+    <!-- MODAL 1: TẠO TÀI KHOẢN MỚI TRỰC TIẾP TỪ ADMIN -->
+    <div class="admin-modal-backdrop" id="adminCreateUserModal">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3><i class="fa-solid fa-user-plus"></i> Tạo Tài Khoản Mới</h3>
+                <button type="button" class="admin-modal-close" onclick="closeAdminModal('adminCreateUserModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="adminNewUserForm" onsubmit="return false;">
+                <div class="admin-form-group">
+                    <label>Tên đăng nhập (In-game ID) *</label>
+                    <input type="text" id="adminNewUsername" placeholder="Ví dụ: ProPlayer2026" required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Địa chỉ Email *</label>
+                    <input type="email" id="adminNewEmail" placeholder="Ví dụ: proplayer@esports.gg" required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Mật khẩu khởi tạo *</label>
+                    <input type="password" id="adminNewPassword" placeholder="Nhập mật khẩu" value="123456" required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Tựa game chính</label>
+                    <select id="adminNewFavGame">
+                        <option value="League of Legends">League of Legends</option>
+                        <option value="Liên Quân Mobile">Liên Quân Mobile</option>
+                        <option value="Valorant">Valorant</option>
+                        <option value="Free Fire">Free Fire</option>
+                        <option value="PUBG Mobile">PUBG Mobile</option>
+                        <option value="Counter-Strike 2">Counter-Strike 2</option>
+                        <option value="FC Online">FC Online</option>
+                    </select>
+                </div>
+                <div class="admin-form-group">
+                    <label>Số dư ví ban đầu (VNĐ)</label>
+                    <input type="number" id="adminNewBalance" value="0" step="10000">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminCreateUserModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary" id="saveAdminNewUserBtn"><i class="fa-solid fa-check"></i> Tạo Tài Khoản</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: NẠP / TRỪ TIỀN VÍ CHO USER -->
+    <div class="admin-modal-backdrop" id="adminAdjustBalanceModal">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3><i class="fa-solid fa-coins"></i> Điều Chỉnh Số Dư Ví</h3>
+                <button type="button" class="admin-modal-close" onclick="closeAdminModal('adminAdjustBalanceModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="adminAdjustBalanceForm" onsubmit="return false;">
+                <input type="hidden" id="adjustTargetUsername">
+                <div class="admin-form-group">
+                    <label>Tài khoản thụ hưởng:</label>
+                    <input type="text" id="adjustDisplayUsername" readonly style="opacity: 0.8; font-weight: 700;">
+                </div>
+                <div class="admin-form-group">
+                    <label>Số dư hiện tại:</label>
+                    <strong style="color: #10b981; font-size: 1.1rem;" id="adjustCurrentBalanceText">0 đ</strong>
+                </div>
+                <div class="admin-form-group">
+                    <label>Hành động:</label>
+                    <select id="adjustActionType">
+                        <option value="ADD">➕ Cộng thêm tiền vào ví (Nạp tiền)</option>
+                        <option value="SUB">➖ Trừ bớt tiền trong ví</option>
+                    </select>
+                </div>
+                <div class="admin-form-group">
+                    <label>Số tiền thay đổi (VNĐ) *</label>
+                    <input type="number" id="adjustAmountInput" placeholder="Ví dụ: 100000" min="1000" step="1000" required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Lý do / Ghi chú</label>
+                    <input type="text" id="adjustReasonInput" placeholder="Ví dụ: Nạp tiền VietQR, Thưởng event...">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminAdjustBalanceModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary" id="saveAdjustBalanceBtn"><i class="fa-solid fa-check"></i> Xác Nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: ĐỔI MẬT KHẨU TÀI KHOẢN USER -->
+    <div class="admin-modal-backdrop" id="adminResetPasswordModal">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3><i class="fa-solid fa-key"></i> Đổi Mật Khẩu Cho Thành Viên</h3>
+                <button type="button" class="admin-modal-close" onclick="closeAdminModal('adminResetPasswordModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="adminResetPasswordForm" onsubmit="return false;">
+                <input type="hidden" id="resetTargetUsername">
+                <div class="admin-form-group">
+                    <label>Tài khoản cần đổi:</label>
+                    <input type="text" id="resetDisplayUsername" readonly style="opacity: 0.8; font-weight: 700;">
+                </div>
+                <div class="admin-form-group">
+                    <label>Mật khẩu mới *</label>
+                    <input type="password" id="resetNewPasswordInput" placeholder="Tối thiểu 4 ký tự" minlength="4" required>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminResetPasswordModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary" id="saveResetPasswordBtn"><i class="fa-solid fa-check"></i> Cập Nhật Mật Khẩu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ĐỔI MẬT KHẨU ADMIN MASTER -->
+    <div class="admin-modal-backdrop" id="adminChangeMasterPasswordModal">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <h3><i class="fa-solid fa-user-shield"></i> Cập Nhật Mật Khẩu Quản Trị Viên (Owner)</h3>
+                <button type="button" class="admin-modal-close" onclick="closeAdminModal('adminChangeMasterPasswordModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="adminMasterPasswordForm" onsubmit="return false;">
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 14px;">
+                    Mật khẩu này dùng để đăng nhập vào Bảng Điều Khiển Quản Trị và tài khoản độc quyền <code>admin</code>. Hãy ghi nhớ cẩn thận sau khi đổi.
+                </p>
+                <div class="admin-form-group">
+                    <label>Mật khẩu Quản trị mới *</label>
+                    <input type="password" id="newMasterPasswordInput" placeholder="Nhập mật khẩu quản trị mới" minlength="4" required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Xác nhận mật khẩu mới *</label>
+                    <input type="password" id="confirmMasterPasswordInput" placeholder="Nhập lại mật khẩu mới" minlength="4" required>
+                </div>
+                <div id="masterPassErrorMsg" style="color: #ef4444; font-size: 0.85rem; font-weight: 700; margin-bottom: 10px;"></div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminChangeMasterPasswordModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary" id="saveMasterPasswordBtn"><i class="fa-solid fa-shield-halved"></i> Lưu Mật Khẩu Admin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 5: XEM CHI TIẾT ĐƠN HÀNG SHOP -->
+    <div class="admin-modal-backdrop" id="adminOrderDetailsModal">
+        <div class="admin-modal-box" style="max-width: 720px; width: 95%;">
+            <div class="admin-modal-header">
+                <h3><i class="fa-solid fa-receipt" style="color: #00f0ff;"></i> Chi Tiết Đơn Hàng <span id="modalOrderCode" style="color: #00f0ff;">#ESP-000000</span></h3>
+                <button type="button" class="admin-modal-close" onclick="closeAdminModal('adminOrderDetailsModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div style="padding: 20px 24px;">
+                <!-- THÔNG TIN KHÁCH HÀNG & GIAO HÀNG -->
+                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 12px 0; color: #00f0ff; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-user-check"></i> Thông Tin Người Đặt & Nhận Hàng
+                    </h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.88rem;">
+                        <div><strong style="color: #94a3b8;">Người nhận / Đặt:</strong> <span id="modalOrderCustomer" style="color: #fff; font-weight: 700;">---</span></div>
+                        <div><strong style="color: #94a3b8;">Số điện thoại:</strong> <span id="modalOrderPhone" style="color: #10b981; font-weight: 700;">---</span></div>
+                        <div style="grid-column: span 2;"><strong style="color: #94a3b8;">Địa chỉ nhận hàng:</strong> <span id="modalOrderAddress" style="color: #cbd5e1; font-weight: 600;">---</span></div>
+                        <div><strong style="color: #94a3b8;">Phương thức thanh toán:</strong> <span id="modalOrderPayment" style="color: #ff9800; font-weight: 600;">---</span></div>
+                        <div><strong style="color: #94a3b8;">Thời gian đặt hàng:</strong> <span id="modalOrderDate" style="color: #94a3b8;">---</span></div>
+                    </div>
+                </div>
+
+                <!-- DANH SÁCH SẢN PHẨM TRONG ĐƠN -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h4 style="margin: 0; color: #fff; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-box-open" style="color: #00f0ff;"></i> Các Sản Phẩm Trong Đơn Hàng
+                    </h4>
+                    <span id="modalOrderItemCount" style="font-size: 0.82rem; color: #94a3b8;">0 món đồ</span>
+                </div>
+
+                <div class="admin-table-wrap" style="max-height: 260px; overflow-y: auto; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;">
+                    <table class="admin-table" style="font-size: 0.86rem; margin: 0;">
+                        <thead>
+                            <tr>
+                                <th style="width: 55px;">Ảnh</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Phân Loại</th>
+                                <th>Đơn Giá</th>
+                                <th>SL</th>
+                                <th>Thành Tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalOrderItemsBody">
+                            <!-- JS nạp vào -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TỔNG KẾT TIỀN & TRẠNG THÁI -->
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #94a3b8; font-size: 0.88rem;">Trạng thái đơn:</span>
+                        <span id="modalOrderStatusBadge" class="badge-status active">Chờ xác nhận</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="color: #94a3b8; font-size: 0.92rem; margin-right: 10px;">Tổng Giá Trị Đơn Hàng:</span>
+                        <span id="modalOrderTotal" style="color: #00f0ff; font-size: 1.4rem; font-weight: 800;">0 đ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding: 14px 24px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminOrderDetailsModal')"><i class="fa-solid fa-xmark"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST THÔNG BÁO -->
+    <div id="adminToastContainer" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
+        <!-- Mã nguồn JavaScript Quản Trị Hệ Thống -->
+    <script src="assets/js/admin.js?v=3.2.0"></script>
+</body>
+</html>
+

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mã Đăng Nhập Esports ID</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ebebeb;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    table {
+      border-collapse: collapse;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ebebeb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1f2937;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ebebeb; width: 100%; min-height: 100vh; padding: 40px 15px;">
+    <tr>
+      <td align="center" valign="top">
+        <!-- Main Email Container -->
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; width: 100%; background: #ebebeb; border-radius: 8px; overflow: hidden;">
+          
+          <!-- Header Area with Esports Badge Logo -->
+          <tr>
+            <td align="center" style="padding: 40px 20px 24px 20px;">
+              <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center" style="width: 76px; height: 76px; background-color: #0b1329; border: 2.5px solid #00f0ff; border-radius: 50%; box-shadow: 0 4px 16px rgba(0, 240, 255, 0.4);">
+                    <!-- Nhúng trực tiếp mã vector từ logo.svg (Không phụ thuộc link ngoài, không bao giờ bị lỗi ảnh) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48" style="display: block; margin: 0 auto;">
+                      <defs>
+                        <linearGradient id="neonGradEmailRiot" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#00f3ff" />
+                          <stop offset="100%" stop-color="#0066ff" />
+                        </linearGradient>
+                      </defs>
+                      <!-- Khung khiên Esports -->
+                      <path d="M32 3 L56 12 V31 C56 46 45.5 56.5 32 61 C18.5 56.5 8 46 8 31 V12 L32 3 Z" fill="#0d1b2a" stroke="url(#neonGradEmailRiot)" stroke-width="3.5" stroke-linejoin="round" />
+                      <!-- Tay cầm chơi game ở giữa -->
+                      <path d="M21 25 H43 C47.5 25 51 28.5 51 33 C51 37.5 47.5 41 43 41 C40.2 41 37.7 39.6 36.2 37.5 H27.8 C26.3 39.6 23.8 41 21 41 C16.5 41 13 37.5 13 33 C13 28.5 16.5 25 21 25 Z" fill="#00f0ff" />
+                      <!-- Phím chữ thập bên trái -->
+                      <path d="M20 29.5 H22.5 V32 H25 V34.5 H22.5 V37 H20 V34.5 H17.5 V32 H20 Z" fill="#0d1b2a" />
+                      <!-- Hai nút bấm bên phải -->
+                      <circle cx="43.5" cy="31" r="2" fill="#0d1b2a" />
+                      <circle cx="39.5" cy="35" r="2" fill="#0d1b2a" />
+                    </svg>
+                  </td>
+                </tr>
+              </table>
+              <h1 style="margin: 22px 0 0 0; font-size: 28px; font-weight: 800; color: #111827; letter-spacing: -0.3px; text-transform: none;">
+                Mã Đăng Nhập
+              </h1>
+            </td>
+          </tr>
+
+          <!-- White Content Box -->
+          <tr>
+            <td style="padding: 0 16px 20px 16px;">
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;">
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <p style="margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #4b5563; font-weight: 500;">
+                      Đây là mã phê duyệt đăng nhập của bạn:
+                    </p>
+                    
+                    <!-- Spaced OTP Digits -->
+                    <div style="margin: 20px 0 24px 0; padding: 18px 10px; background-color: #f9fafb; border-radius: 6px; border: 1px dashed #e5e7eb;">
+                      <span style="font-size: 36px; font-weight: 800; letter-spacing: 14px; color: #111827; font-family: 'Consolas', 'Courier New', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; display: inline-block; padding-left: 14px;">
+                        {{OTP_SPACED}}
+                      </span>
+                    </div>
+
+                    <p style="margin: 20px 0 0 0; font-size: 13px; color: #9ca3af; line-height: 1.5;">
+                      Mã xác thực có hiệu lực trong vòng <strong style="color: #6b7280;">5 phút</strong>.<br>
+                      Vui lòng không chia sẻ mã này với bất kỳ ai để bảo vệ tài khoản Esports ID của bạn.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer Area -->
+          <tr>
+            <td align="center" style="padding: 16px 24px 30px 24px; color: #9ca3af; font-size: 12px; line-height: 1.6; text-align: center;">
+              <p style="margin: 0 0 8px 0;">
+                Nếu bạn không yêu cầu mã này, bạn có thể yên tâm bỏ qua email này. Tài khoản Esports ID của bạn luôn được bảo vệ an toàn.
+              </p>
+              <p style="margin: 0; font-size: 11px; color: #b4b8be;">
+                &copy; 2026 CÔNG TY TNHH ESPORTS VIỆT NAM &amp; CỔNG ESPORTS ID. All rights reserved.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

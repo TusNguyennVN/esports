@@ -1,0 +1,68 @@
+# ==========================================
+# CÁC FILE & THƯ MỤC KHÔNG NÊN PUSH LÊN GIT
+# ==========================================
+
+# 1. Hệ điều hành & Thư mục hệ thống (OS generated files)
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# 2. Cấu hình trình biên tập / IDE cá nhân
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 3. File nén sao lưu & File tạm thời
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.bak
+*.tmp
+*.temp
+*.swp
+*~
+
+# 4. Logs & Lịch sử
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 5. Môi trường & Bí mật bảo mật (Secrets / Env)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# 6. Thư mục cài đặt thư viện (nếu có dùng sau này)
+node_modules/
+dist/
+build/
+__pycache__/
+*.py[cod]
+*$py.class
+cloudflared.exe
+
+# 7. File media dung lượng lớn (Tùy chọn)
+# File video background (~24MB). Nếu muốn giảm dung lượng repo thì mở comment dòng dưới:
+# video/videobackgroundfinal.mp4

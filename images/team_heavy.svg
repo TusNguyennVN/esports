@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="hevBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1908"/>
+      <stop offset="100%" stop-color="#332a0c"/>
+    </linearGradient>
+    <linearGradient id="hevGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#hevBg)" stroke="#eab308" stroke-width="2"/>
+  <!-- Heavy Armor Shield -->
+  <polygon points="60,24 88,36 80,72 60,88 40,72 32,36" fill="#181504" stroke="url(#hevGold)" stroke-width="3"/>
+  <polygon points="60,32 78,40 72,66 60,78 48,66 42,40" fill="url(#hevGold)"/>
+  <text x="60" y="64" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="22" fill="#181504" text-anchor="middle">H</text>
+  <text x="60" y="110" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="11" fill="#fde047" text-anchor="middle" letter-spacing="1.5">HEAVY</text>
+</svg>
